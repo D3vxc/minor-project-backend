@@ -2,13 +2,14 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const Uroute = require("./user/user.route")
 // routes import starts from here
 
 /// default middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: "*" }));
+app.use("/user", Uroute)
 
 /// routes starts from here
 // app.use("/admin", adminRoutes);
