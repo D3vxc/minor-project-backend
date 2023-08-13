@@ -1,6 +1,5 @@
 const mangoose = require("mongoose");
 const Schema = mangoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 const Admin = new Schema(
   {

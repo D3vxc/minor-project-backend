@@ -3,34 +3,43 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-    const { email, username, phone, password } = req.body;
+    const { username, phone, email, password } = req.body;
     try {
+        const usernameUser = await UserModel.findOne({ username });
+        if (usernameUser) {
+            return res.status(400).json({ message: "username already taken" });
+        }
+
+
+        const phoneUser = await UserModel.findOne({ phone });
+        if (phoneUser) {
+            return res.status(400).json({ message: "enter different phone number" });
+        }
+
         const emailUser = await UserModel.findOne({ email });
         if (emailUser) {
-            return res.status(400).send({ message: "User is already exist" });
+            return res.status(400).json({ message: "email already exists" });
         }
-        const Username = await UserModel.findOne({ username });
-        if (Username) {
-            return res.status(400).send({ message: "Username is already exist" });
-        }
-        const Salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, Salt);
-        const newuser = await UserModel.create({
-            email,
+
+
+
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        const newUser = await UserModel.create({
             username,
             phone,
-            password: hashedPassword,
+            email,
+            password: hashPassword,
         });
         res
             .status(201)
-            .send({ data: newuser, message: "User create successfully" })
+            .send({ data: newUser, message: "User created successfully" });
+    } catch (error) {
+        res.status(500).send(error);
+        console.log(error);
     }
-
-    catch (err) {
-        res.status(500).send(err);
-    }
-}
-
+};
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {

@@ -2,18 +2,18 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const Uroute = require("./user/user.route")
 // routes import starts from here
 const adminRoutes = require("./admin/admin.routes");
+const userRoutes = require("./user/user.route")
 
 /// default middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: "*" }));
-app.use("/user", Uroute)
 
 /// routes starts from here
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes)
 
 const port = process.env.PORT || 5000;
 
