@@ -4,7 +4,10 @@ const ObjectId = Schema.ObjectId;
 
 const Admin = new Schema(
   {
-    _id: ObjectId,
+    phone: {
+      type: Number,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
