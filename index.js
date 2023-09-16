@@ -19,13 +19,11 @@ app.use('/user', userRoutes);
 app.use('/workout', workoutRoutes);
 
 const port = process.env.PORT || 7000;
-const mongoURI =
-  process.env.MONGO_URI ||
-  // 'mongodb+srv://anas:anascr7@anas.qjhcajd.mongodb.net/?retryWrites=true&w=majority';
+const mongoURL =
+  process.env.MONGO_URL ||
   'mongodb+srv://minor-project:project123@cluster0.zsj7ci4.mongodb.net/';
 
-// Connect to MongoDB
-mongoose.connect(mongoURI, {
+mongoose.connect(mongoURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
