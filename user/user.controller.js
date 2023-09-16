@@ -5,9 +5,9 @@ const jwt = require("jsonwebtoken");
 const register = async (req, res) => {
     const { username, phone, email, password } = req.body;
     try {
-        const usernameUser = await UserModel.findOne({ username });
-        if (usernameUser) {
-            return res.status(400).json({ message: "username already taken" });
+        const UserEmail = await UserModel.findOne({ email });
+        if (UserEmail) {
+            return res.status(400).json({ message: "Email already taken" });
         }
 
 
@@ -57,9 +57,10 @@ const login = async (req, res) => {
 
         const token = generateToken(user._id);
 
-        res.status(200).json({ token });
+        res.status(200).json({ token, message: "User Login Successfully :)" } );
     } catch (error) {
         res.status(500).json({ error: "Internal server error" });
+
     }
 }
 

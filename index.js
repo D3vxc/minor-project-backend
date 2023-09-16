@@ -15,10 +15,10 @@ app.use(cors({ origin: "*" }));
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes)
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7000;
 
 mongoose.connect(
-  `mongodb+srv://devmistry932:aEXOtzy5Disx0qvP@cluster0.acusbpm.mongodb.net/?retryWrites=true&w=majority`,
+  `mongodb+srv://anas:anascr7@anas.qjhcajd.mongodb.net/`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
