@@ -27,6 +27,14 @@ const register = async (req, res) => {
     console.log(error);
   }
 };
+const getUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -54,4 +62,4 @@ function generateToken(userId) {
   return jwt.sign({ userId }, 'your-secret-key', { expiresIn: '1h' });
 }
 
-module.exports = { register, login };
+module.exports = { register, login, getUsers };
