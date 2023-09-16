@@ -5,6 +5,7 @@ const cors = require("cors");
 // routes import starts from here
 const adminRoutes = require("./admin/admin.routes");
 const userRoutes = require("./user/user.route")
+const workout = require("./Workout/workout.route")
 
 /// default middlewares
 app.use(express.json());
@@ -13,7 +14,8 @@ app.use(cors({ origin: "*" }));
 
 /// routes starts from here
 app.use("/admin", adminRoutes);
-app.use("/user", userRoutes)
+app.use("/user", userRoutes);
+app.use("/workout", workout);
 
 const port = process.env.PORT || 7000;
 
