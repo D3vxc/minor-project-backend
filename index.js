@@ -19,13 +19,18 @@ app.use("/workout", workout);
 
 const port = process.env.PORT || 7000;
 
+// mongoose.connect(
+//   // `mongodb+srv://anas:anascr7@anas.qjhcajd.mongodb.net/`,
+//   `mongodb+srv://anas:anascr7@anas.qjhcajd.mongodb.net/?retryWrites=true&w=majority`,
+//   {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   }
+// );
 mongoose.connect(
-  `mongodb+srv://anas:anascr7@anas.qjhcajd.mongodb.net/`,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
+  `mongodb+srv://anas:anascr7@anas.qjhcajd.mongodb.net/?retryWrites=true&w=majority`
 );
+
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
