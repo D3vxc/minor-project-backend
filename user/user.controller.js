@@ -1,13 +1,13 @@
-const UserModel = require('./user.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const UserModel = require("./user.model");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   const { username, phone, email, password } = req.body;
   try {
     const UserEmail = await UserModel.findOne({ email });
     if (UserEmail) {
-      return res.status(400).json({ message: 'invalid email' });
+      return res.status(400).json({ message: "invalid email" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -18,10 +18,11 @@ const register = async (req, res) => {
       phone,
       email,
       password: hashPassword,
+      isVerified: true,
     });
     res
       .status(201)
-      .send({ data: newUser, message: 'User created successfully' });
+      .send({ data: newUser, message: "User created successfully" });
   } catch (error) {
     res.status(500).send(error);
     console.log(error);
@@ -32,7 +33,7 @@ const getUsers = async (req, res) => {
     const users = await UserModel.find();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 const login = async (req, res) => {
@@ -41,25 +42,25 @@ const login = async (req, res) => {
     const user = await UserModel.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = generateToken(user._id);
 
-    res.status(200).json({ token, message: 'User Login Successfully :)' });
+    res.status(200).json({ token, message: "User Login Successfully :)" });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 function generateToken(userId) {
-  return jwt.sign({ userId }, 'your-secret-key', { expiresIn: '1h' });
+  return jwt.sign({ userId }, "your-secret-key", { expiresIn: "1h" });
 }
 
 module.exports = { register, login, getUsers };
