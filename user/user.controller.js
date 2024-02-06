@@ -2,8 +2,22 @@ const UserModel = require("./user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const nodemailer = ("nodemailer");
+const randomstring = ("randomstring");
+
+const sendresetPasswordMail = async(name, email, token)=>
+{
+  try {
+    nodemailer.createTransport({
+      
+    })
+  } catch (error) {
+    res.status(400).send({success:false,message:error.message});
+  }
+}
+
 const register = async (req, res) => {
-  const { username, phone, email, password } = req.body;
+  const { name, phone, email, password } = req.body;
   try {
     const UserEmail = await UserModel.findOne({ email });
     if (UserEmail) {
@@ -14,7 +28,7 @@ const register = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, salt);
 
     const newUser = await UserModel.create({
-      username,
+      name,
       phone,
       email,
       password: hashPassword,
@@ -61,6 +75,24 @@ const login = async (req, res) => {
 
 function generateToken(userId) {
   return jwt.sign({ userId }, "your-secret-key", { expiresIn: "1h" });
+}
+
+const forget_password = async (req, res) => 
+{
+      try {
+        const  userdata = await UserModel.findOne({email:req.body.email});
+
+        if (userdata) {
+          const randomString = randomstring.generate();
+          const data = await UserModel.updateOne({email:email},{$set:{token:randomString}});
+          res.status(400).send({success:true,message:"please check your "});
+        } else {
+          res.status(400).send({success:true,message:"This email does not exists.."});
+        }
+        
+      } catch (error) {
+        res.status(400).send({success:false,message:"Email not found"});
+      }
 }
 
 module.exports = { register, login, getUsers };

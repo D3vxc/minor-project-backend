@@ -13,7 +13,7 @@ const User = new Schema(
             require: true,
         },
 
-        username: {
+        name: {
             type: String,
             require: true,
         },
@@ -22,7 +22,7 @@ const User = new Schema(
             type: String,
             require: true,
         },
-    },
+            },
     { timestamps: true, strict: false }
 );
 
