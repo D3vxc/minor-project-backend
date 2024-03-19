@@ -34,6 +34,7 @@ const register = async (req, res) => {
       password: hashPassword,
       isVerified: true,
     });
+    
     res
       .status(201)
       .send({ data: newUser, message: "User created successfully" });
