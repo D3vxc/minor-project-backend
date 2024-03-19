@@ -2,19 +2,16 @@ const UserModel = require("./user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const nodemailer = ("nodemailer");
-const randomstring = ("randomstring");
+const nodemailer = "nodemailer";
+const randomstring = "randomstring";
 
-const sendresetPasswordMail = async(name, email, token)=>
-{
+const sendresetPasswordMail = async (name, email, token) => {
   try {
-    nodemailer.createTransport({
-      
-    })
+    nodemailer.createTransport({});
   } catch (error) {
-    res.status(400).send({success:false,message:error.message});
+    res.status(400).send({ success: false, message: error.message });
   }
-}
+};
 
 const register = async (req, res) => {
   const { name, phone, email, password } = req.body;
@@ -74,26 +71,43 @@ const login = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const user = await UserModel.findByIdAndRemove(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 function generateToken(userId) {
   return jwt.sign({ userId }, "your-secret-key", { expiresIn: "1h" });
 }
 
-const forget_password = async (req, res) => 
-{
-      try {
-        const  userdata = await UserModel.findOne({email:req.body.email});
+const forget_password = async (req, res) => {
+  try {
+    const userdata = await UserModel.findOne({ email: req.body.email });
 
-        if (userdata) {
-          const randomString = randomstring.generate();
-          const data = await UserModel.updateOne({email:email},{$set:{token:randomString}});
-          res.status(400).send({success:true,message:"please check your "});
-        } else {
-          res.status(400).send({success:true,message:"This email does not exists.."});
-        }
-        
-      } catch (error) {
-        res.status(400).send({success:false,message:"Email not found"});
-      }
-}
+    if (userdata) {
+      const randomString = randomstring.generate();
+      const data = await UserModel.updateOne(
+        { email: email },
+        { $set: { token: randomString } }
+      );
+      res.status(400).send({ success: true, message: "please check your " });
+    } else {
+      res
+        .status(400)
+        .send({ success: true, message: "This email does not exists.." });
+    }
+  } catch (error) {
+    res.status(400).send({ success: false, message: "Email not found" });
+  }
+};
 
-module.exports = { register, login, getUsers };
+module.exports = { register, login, getUsers, deleteUser, forget_password };
