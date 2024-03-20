@@ -1,59 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { AllProduct, NewProduct, GetProduct, UpdateProduct, DeleteProduct } = require('./product.controller');
+const { 
+  AllProduct, 
+  NewProduct, 
+  GetProduct, 
+  UpdateProduct, 
+  DeleteProduct, 
+} = require('./product.controller');
 
-router.get('/products', async (req, res) => {
-    try {
-      const products = await AllProduct.find();
-      res.json(products);
-    } catch (err) {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
-router.post('/products', async (req, res) => {
-    try {
-      const product = await NewProduct.create(req.body);
-      res.status(201).json(product);
-    } catch (err) {
-      res.status(400).json({ error: 'Invalid Request' });
-    }
-  });
-  
-router.get('/products/:id', async (req, res) => {
-    try {
-      const product = await GetProduct.findById(req.params.id);
-      if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
-      res.json(product);
-    } catch (err) {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
-router.put('/products/:id', async (req, res) => {
-    try {
-      const product = await UpdateProduct.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
-      res.json(product);
-    } catch (err) {
-      res.status(400).json({ error: 'Invalid Request' });
-    }
-  });
-  
-router.delete('/products/:id', async (req, res) => {
-    try {
-      const product = await DeleteProduct.findByIdAndDelete(req.params.id);
-      if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
-      res.json({ message: 'Product deleted successfully' });
-    } catch (err) {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+router.get('/allproducts', AllProduct);
+router.post('/newproducts', NewProduct);  
+router.get('/getproducts/:id', GetProduct);
+router.put('/updateproducts/:id', UpdateProduct);
+router.delete('/deleteproducts/:id', DeleteProduct);
 
-  module.exports = router;
+module.exports = router;

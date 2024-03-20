@@ -12,9 +12,16 @@ const AllProduct = async (req, res) => {
 
 // Create a new product
 const NewProduct = async (req, res) => {
+  const {name, description, price} = req.body;
   try {
-    const product = await ProductModel.create(req.body);
-    res.status(201).json(product);
+    const product = await ProductModel.create({
+      name,
+      description,
+      price
+   });
+    res
+    .status(201)
+    .send({ data: product, message: "Product created successfully" });
   } catch (err) {
     res.status(400).json({ error: 'Invalid Request' });
   }
