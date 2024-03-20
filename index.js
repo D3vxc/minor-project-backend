@@ -8,7 +8,6 @@ require("dotenv").config();
 const adminRoutes = require("./admin/admin.routes");
 const userRoutes = require("./user/user.route");
 const workoutRoutes = require("./Workout/workout.route");
-const productRoutes = require("./products/product.route");
 
 // Middleware
 app.use(express.json());
@@ -19,7 +18,6 @@ app.use(cors({ origin: "*" }));
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/workout", workoutRoutes);
-app.use("/products", productRoutes);
 
 const port = process.env.PORT || 7001;
 const mongoURL =
