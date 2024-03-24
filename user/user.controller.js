@@ -1,6 +1,8 @@
 const UserModel = require("./user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const generateOTP = require("../utils/otp");
+const sendMail = require("../utils/SendMail");
 
 const nodemailer = "nodemailer";
 const randomstring = "randomstring";
@@ -64,7 +66,9 @@ const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    res.status(200).json({ token, message: "User Login Successfully :)" });
+    res
+      .status(200)
+      .json({ token, message: "User Login Successfully :)", user });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -91,22 +95,56 @@ function generateToken(userId) {
 const forget_password = async (req, res) => {
   try {
     const userdata = await UserModel.findOne({ email: req.body.email });
-
-    if (userdata) {
-      const randomString = randomstring.generate();
-      const data = await UserModel.updateOne(
-        { email: email },
-        { $set: { token: randomString } }
-      );
-      res.status(400).send({ success: true, message: "please check your " });
-    } else {
-      res
+    if (!userdata) {
+      return res
         .status(400)
-        .send({ success: true, message: "This email does not exists.." });
+        .send({ success: false, message: "Email not found" });
     }
+    const otp = generateOTP();
+    sendMail(
+      req.body.email,
+      "Reset Password",
+      `Your OTP is ${otp}. This OTP is valid for 10 minutes`
+    );
+    const user = await UserModel.findOneAndUpdate(
+      { email: req.body.email },
+      { otp },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .send({ success: true, data: user, message: "OTP sent to your email" });
   } catch (error) {
     res.status(400).send({ success: false, message: "Email not found" });
   }
 };
-
-module.exports = { register, login, getUsers, deleteUser, forget_password };
+const reset_password = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({
+      email: req.body.email,
+    });
+    if (user.otp !== Number(req.body.otp)) {
+      return res.status(400).send({ success: false, message: "Invalid OTP" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { password: hashPassword } },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .send({ success: true, data: updatedUser, message: "Password updated" });
+  } catch (error) {
+    res.status(400).send({ success: false, message: "Email not found" });
+  }
+};
+module.exports = {
+  register,
+  login,
+  getUsers,
+  deleteUser,
+  forget_password,
+  reset_password,
+};

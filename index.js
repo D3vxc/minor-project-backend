@@ -26,6 +26,7 @@ app.use("/products", productRoutes);
 app.use("/classes", classesRoutes);
 app.use("/trainer", trainerRoutes);
 app.use("/schedule", scheduleRoutes);
+// app.use("/enroll", )
 
 const port = process.env.PORT || 7001;
 const mongoURL =

@@ -6,6 +6,7 @@ const {
   getUsers,
   deleteUser,
   forget_password,
+  reset_password,
 } = require("./user.controller");
 
 router.post("/register", register);
@@ -13,5 +14,6 @@ router.post("/login", login);
 router.get("/getusers", getUsers);
 router.delete("/deleteuser/:id", deleteUser);
 router.post("/forget_password", forget_password);
+router.post("/reset_password", reset_password);
 
 module.exports = router;
