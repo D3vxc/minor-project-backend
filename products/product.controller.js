@@ -6,24 +6,27 @@ const AllProduct = async (req, res) => {
     const products = await ProductModel.find();
     res.json(products);
   } catch (err) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 // Create a new product
 const NewProduct = async (req, res) => {
-  const {name, description, price} = req.body;
+  // console.log("request=>>", req.body);
+  const { name, description, price, stock, image } = req.body;
   try {
     const product = await ProductModel.create({
       name,
       description,
-      price
-   });
+      price,
+      stock,
+      image,
+    });
     res
-    .status(201)
-    .send({ data: product, message: "Product created successfully" });
+      .status(201)
+      .send({ data: product, message: "Product created successfully" });
   } catch (err) {
-    res.status(400).json({ error: 'Invalid Request' });
+    res.status(400).json({ error: "Invalid Request" });
   }
 };
 
@@ -32,24 +35,28 @@ const GetProduct = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.id);
     if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+      return res.status(404).json({ error: "Product not found" });
     }
     res.json(product);
   } catch (err) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 // Update a product
 const UpdateProduct = async (req, res) => {
   try {
-    const product = await ProductModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const product = await ProductModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+      return res.status(404).json({ error: "Product not found" });
     }
     res.json(product);
   } catch (err) {
-    res.status(400).json({ error: 'Invalid Request' });
+    res.status(400).json({ error: "Invalid Request" });
   }
 };
 
@@ -58,11 +65,11 @@ const DeleteProduct = async (req, res) => {
   try {
     const product = await ProductModel.findByIdAndDelete(req.params.id);
     if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+      return res.status(404).json({ error: "Product not found" });
     }
-    res.json({ message: 'Product deleted successfully' });
+    res.json({ message: "Product deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -71,5 +78,5 @@ module.exports = {
   NewProduct,
   GetProduct,
   UpdateProduct,
-  DeleteProduct
+  DeleteProduct,
 };

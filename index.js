@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: "*" }));
 
 // Routes
-app.use("/admin", adminRoutes);
+// app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use("/workout", workoutRoutes);
 app.use("/products", productRoutes);
