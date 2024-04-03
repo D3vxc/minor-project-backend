@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { authenticate } = require("../middleware/auth.middleware");
 const {
   register,
   login,
@@ -10,7 +11,7 @@ const {
 } = require("./user.controller");
 
 router.post("/register", register);
-router.post("/login", login);
+router.post("/login", authenticate, login);
 router.get("/getusers", getUsers);
 router.delete("/deleteuser/:id", deleteUser);
 router.post("/forget_password", forget_password);

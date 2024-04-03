@@ -11,6 +11,7 @@ const workoutRoutes = require("./Workout/workout.route");
 const productRoutes = require("./products/product.route");
 const classesRoutes = require("./classes/classes.route");
 const trainerRoutes = require("./trainer/trainer.route");
+// const userLoginRoute = require("./user/userLogin.route");
 // const scheduleRoutes = require("./schedule/schedule.route");
 const cartRoutes = require("./cart/cart.route");
 
@@ -29,8 +30,9 @@ app.use("/classes", classesRoutes); // Protected route
 app.use("/user", authenticate, userRoutes); // Assuming login and registration don't require auth
 app.use("/workout", authenticate, workoutRoutes); // Example of protected route
 app.use("/trainer", authenticate, trainerRoutes); // Protected route
-// app.use("/schedule", authenticate, scheduleRoutes); // Protected route
 app.use("/cart", authenticate, cartRoutes); // Cart operations should be protected
+// app.use("/userlogin", userLoginRoute);
+// app.use("/schedule", authenticate, scheduleRoutes); // Protected route
 
 const port = process.env.PORT || 7001;
 const mongoURL =

@@ -66,6 +66,8 @@ const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
+    console.log("User Login Successfully :)", user, token);
+
     res
       .status(200)
       .json({ token, message: "User Login Successfully :)", user });
