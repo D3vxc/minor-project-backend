@@ -2,15 +2,17 @@ const CartModel = require("./cart.model.js"); // You would need to create this m
 
 // Add item to cart
 const addToCart = async (req, res) => {
-  const { userId, productId, quantity } = req.body;
+  const { productId, quantity } = req.body;
   try {
-    let cart = await CartModel.findOne({ user: userId });
+    const user = req.user;
+    console.log(productId, quantity, user, "productId, quantity");
+    let cart = await CartModel.findOne({ user: user._id });
     const product = { product: productId, quantity };
     if (!cart) {
       // If cart doesn't exist for the user, create a new cart
       cart = new CartModel({
-        user: userId,
-        products: [product],
+        user: user._id,
+        products: [productId],
       });
     } else {
       // If cart exists, add or update the product

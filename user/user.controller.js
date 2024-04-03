@@ -70,7 +70,7 @@ const login = async (req, res) => {
 
     res
       .status(200)
-      .json({ token, message: "User Login Successfully :)", user });
+      .json({ token, message: "User LoggedIn Successfully :)", user });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -91,7 +91,7 @@ const deleteUser = async (req, res) => {
 };
 
 function generateToken(userId) {
-  return jwt.sign({ userId }, "your-secret-key", { expiresIn: "1h" });
+  return jwt.sign({ userId }, "secret", { expiresIn: "1h" });
 }
 
 const forget_password = async (req, res) => {

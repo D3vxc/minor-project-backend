@@ -11,12 +11,14 @@ const workoutRoutes = require("./Workout/workout.route");
 const productRoutes = require("./products/product.route");
 const classesRoutes = require("./classes/classes.route");
 const trainerRoutes = require("./trainer/trainer.route");
+const membershipRoutes = require("./membership/membership.route");
 // const userLoginRoute = require("./user/userLogin.route");
 // const scheduleRoutes = require("./schedule/schedule.route");
 const cartRoutes = require("./cart/cart.route");
 
 // Import authentication middleware
 const { authenticate } = require("./middleware/auth.middleware.js"); // Adjust path as needed
+const { Adminauthenticate } = require("./middleware/adminAuth.middleware.js");
 
 // Middleware
 app.use(express.json());
@@ -25,12 +27,15 @@ app.use(cors({ origin: "*" }));
 
 // Routes
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes); // Assuming login and registration don't require auth
+app.use(authenticate);
+app.use("/cart", cartRoutes);
+app.use(Adminauthenticate); // Cart operations should be protected
 app.use("/products", productRoutes); // Public route
 app.use("/classes", classesRoutes); // Protected route
-app.use("/user", authenticate, userRoutes); // Assuming login and registration don't require auth
-app.use("/workout", authenticate, workoutRoutes); // Example of protected route
-app.use("/trainer", authenticate, trainerRoutes); // Protected route
-app.use("/cart", authenticate, cartRoutes); // Cart operations should be protected
+app.use("/workout", workoutRoutes); // Example of protected route
+app.use("/trainer", trainerRoutes); // Protected route
+app.use("/membership", membershipRoutes); // Protected route
 // app.use("/userlogin", userLoginRoute);
 // app.use("/schedule", authenticate, scheduleRoutes); // Protected route
 
