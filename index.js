@@ -11,7 +11,11 @@ const workoutRoutes = require("./Workout/workout.route");
 const productRoutes = require("./products/product.route");
 const classesRoutes = require("./classes/classes.route");
 const trainerRoutes = require("./trainer/trainer.route");
-const scheduleRoutes = require("./schedule/schedule.route");
+// const scheduleRoutes = require("./schedule/schedule.route");
+const cartRoutes = require("./cart/cart.route");
+
+// Import authentication middleware
+const { authenticate } = require("./middleware/auth.middleware.js"); // Adjust path as needed
 
 // Middleware
 app.use(express.json());
@@ -19,14 +23,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: "*" }));
 
 // Routes
-// app.use("/admin", adminRoutes);
-app.use("/user", userRoutes);
-app.use("/workout", workoutRoutes);
-app.use("/products", productRoutes);
-app.use("/classes", classesRoutes);
-app.use("/trainer", trainerRoutes);
-app.use("/schedule", scheduleRoutes);
-// app.use("/enroll", )
+app.use("/admin", adminRoutes);
+app.use("/products", productRoutes); // Public route
+app.use("/classes", classesRoutes); // Protected route
+app.use("/user", authenticate, userRoutes); // Assuming login and registration don't require auth
+app.use("/workout", authenticate, workoutRoutes); // Example of protected route
+app.use("/trainer", authenticate, trainerRoutes); // Protected route
+// app.use("/schedule", authenticate, scheduleRoutes); // Protected route
+app.use("/cart", authenticate, cartRoutes); // Cart operations should be protected
 
 const port = process.env.PORT || 7001;
 const mongoURL =
