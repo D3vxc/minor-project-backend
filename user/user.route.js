@@ -8,6 +8,7 @@ const {
   deleteUser,
   forget_password,
   reset_password,
+  getSelf,
 } = require("./user.controller");
 const { authenticate } = require("../middleware/auth.middleware");
 
@@ -17,8 +18,6 @@ router.get("/getusers", getUsers);
 router.delete("/deleteuser/:id", deleteUser);
 router.post("/forget_password", forget_password);
 router.post("/reset_password", reset_password);
-router.get("/get-self", authenticate, (req, res) => {
-  res.status(200).json(req.user);
-});
+router.get("/get-self", authenticate, getSelf);
 
 module.exports = router;

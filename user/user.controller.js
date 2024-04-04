@@ -66,7 +66,7 @@ const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    console.log("User Login Successfully :)", user, token);
+    // console.log("User Login Successfully :)", user, token);
 
     res
       .status(200)
@@ -142,6 +142,24 @@ const reset_password = async (req, res) => {
     res.status(400).send({ success: false, message: "Email not found" });
   }
 };
+const getSelf = async (req, res) => {
+  // console.log("user here=>>>", req.user);
+  try {
+    const userId = req.user._id;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res
+        .status(404)
+        .send({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(500).send({ success: false, message: "An error occurred" });
+  }
+};
 module.exports = {
   register,
   login,
@@ -149,4 +167,5 @@ module.exports = {
   deleteUser,
   forget_password,
   reset_password,
+  getSelf,
 };
