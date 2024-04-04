@@ -31,8 +31,8 @@ app.use("/user", userRoutes); // Assuming login and registration don't require a
 app.use("/classes", classesRoutes); // Protected route
 app.use(authenticate);
 app.use("/cart", cartRoutes);
-app.use(Adminauthenticate); // Cart operations should be protected
 app.use("/products", productRoutes); // Public route
+app.use(Adminauthenticate); // Cart operations should be protected
 app.use("/workout", workoutRoutes); // Example of protected route
 app.use("/trainer", trainerRoutes); // Protected route
 app.use("/membership", membershipRoutes); // Protected route
