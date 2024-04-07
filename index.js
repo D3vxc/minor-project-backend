@@ -26,8 +26,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: "*" }));
 
 // Routes
+app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
-app.use("/user", userRoutes); // Assuming login and registration don't require auth
 app.use("/classes", classesRoutes); // Protected route
 app.use(authenticate);
 app.use("/cart", cartRoutes);

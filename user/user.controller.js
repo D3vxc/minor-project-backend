@@ -160,6 +160,16 @@ const getSelf = async (req, res) => {
     res.status(500).send({ success: false, message: "An error occurred" });
   }
 };
+
+const logout = async (req, res) => {
+  // res.clearCookie("token");
+  // res.status(200).send({ message: "Logged out successfully" });
+
+  res.clearCookie("token");
+  res.status(200).send({ message: "Logged out successfully" });
+  console.log("Logged out successfully");
+};
+
 module.exports = {
   register,
   login,
@@ -168,4 +178,5 @@ module.exports = {
   forget_password,
   reset_password,
   getSelf,
+  logout,
 };

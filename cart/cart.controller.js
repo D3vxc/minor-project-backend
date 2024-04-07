@@ -4,30 +4,32 @@ const CartModel = require("./cart.model.js"); // You would need to create this m
 const addToCart = async (req, res) => {
   const { productId, quantity } = req.body;
   try {
-    const user = req.user;
-    console.log(productId, quantity, user, "productId, quantity");
-    let cart = await CartModel.findOne({ user: user._id });
-    const product = { product: productId, quantity };
+    let cart = await CartModel.findOne({ user: req.user._id });
+
     if (!cart) {
-      // If cart doesn't exist for the user, create a new cart
       cart = new CartModel({
-        user: user._id,
-        products: [productId],
+        user: req.user._id,
+        productData: [{ product: productId, quantity }],
       });
     } else {
-      // If cart exists, add or update the product
-      const index = cart.products.findIndex(
+      const existingProductIndex = cart.productData.findIndex(
         (item) => item.product.toString() === productId
       );
-      if (index > -1) {
-        cart.products[index].quantity += quantity;
+
+      if (existingProductIndex > -1) {
+        cart.productData[existingProductIndex].quantity += quantity;
       } else {
-        cart.products.push(product);
+        cart.productData.push({ product: productId, quantity });
       }
     }
+
     await cart.save();
-    res.status(200).json({ message: "Product added to cart", cart });
+    console.log("Product added to cart successfully", cart, req.user._id);
+    res
+      .status(200)
+      .json({ message: "Product added to cart successfully", cart });
   } catch (error) {
+    console.error("Failed to add to cart:", error);
     res.status(500).send({ error: "Internal server error" });
   }
 };
@@ -75,12 +77,14 @@ const removeItemFromCart = async (req, res) => {
 
 // Get cart items
 const getCartItems = async (req, res) => {
-  const { userId } = req.query;
   try {
+    // Assuming your authentication middleware sets req.user
+    const userId = req.user._id; // Use the ID from the JWT payload
     const cart = await CartModel.findOne({ user: userId }).populate(
-      "products.product"
+      "productData.product"
     );
     if (!cart) {
+      // console.log("cart here", cart);
       return res.status(404).json({ message: "Cart not found" });
     }
     res.status(200).json(cart);
