@@ -15,6 +15,7 @@ const membershipRoutes = require("./membership/membership.route");
 // const userLoginRoute = require("./user/userLogin.route");
 // const scheduleRoutes = require("./schedule/schedule.route");
 const cartRoutes = require("./cart/cart.route");
+const paymentRoutes = require("./utils/payment.js");
 
 // Import authentication middleware
 const { authenticate } = require("./middleware/auth.middleware.js"); // Adjust path as needed
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: "*" }));
 
 // Routes
+app.use("/payment", paymentRoutes);
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/classes", classesRoutes); // Protected route
