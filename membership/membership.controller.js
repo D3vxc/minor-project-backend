@@ -4,7 +4,7 @@ const getAllMemberships = async (req, res) => {
   try {
     const memberships = await Membership.find();
     res.json(memberships);
-    console.log("memberships", memberships);
+    // console.log("memberships", memberships);
   } catch (error) {
     console.error("error", error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -12,15 +12,34 @@ const getAllMemberships = async (req, res) => {
 };
 
 const createMembership = async (req, res) => {
-  const { PlanName, PlanPrice, PlanType, GST, isActive } = req.body;
+  // Extract WhatWeOffers along with other fields
+  const {
+    UserId,
+    PlanName,
+    PlanPrice,
+    PlanType,
+    GST,
+    isActive,
+    WhatWeOffers,
+    Discounts,
+    Duration,
+    FreeTrial,
+  } = req.body;
+
   try {
     const newMembership = new Membership({
+      UserId,
       PlanName,
       PlanPrice,
       PlanType,
       GST,
       isActive,
+      WhatWeOffers,
+      Discounts,
+      Duration,
+      FreeTrial,
     });
+
     const savedMembership = await newMembership.save();
     res.status(201).json(savedMembership);
   } catch (error) {

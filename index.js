@@ -28,6 +28,7 @@ app.use(cors({ origin: "*" }));
 
 // Routes
 app.use("/payment", paymentRoutes);
+app.use("/membership", membershipRoutes);
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/classes", classesRoutes); // Protected route
@@ -38,7 +39,6 @@ app.use(Adminauthenticate); // Cart operations should be protected
 app.use("/workout", workoutRoutes); // Example of protected route
 app.use("/trainer", trainerRoutes); // Protected route
 app.use("/membership", membershipRoutes); // Protected route
-// app.use("/userlogin", userLoginRoute);
 // app.use("/schedule", authenticate, scheduleRoutes); // Protected route
 
 const port = process.env.PORT || 7001;

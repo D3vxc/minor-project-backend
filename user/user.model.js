@@ -26,6 +26,11 @@ const User = new Schema(
       type: Boolean,
       default: false,
     },
+    membershipPlanDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "membership",
+      default: "66163b18f24beac8fc046591",
+    },
   },
   { timestamps: true, strict: false }
 );

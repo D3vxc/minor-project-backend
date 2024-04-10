@@ -1,4 +1,5 @@
 const UserModel = require("./user.model");
+const MembershipPlanModel = require("../membership/membership.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const generateOTP = require("../utils/otp");
@@ -142,12 +143,14 @@ const reset_password = async (req, res) => {
     res.status(400).send({ success: false, message: "Email not found" });
   }
 };
+
 const getSelf = async (req, res) => {
-  // console.log("user here=>>>", req.user);
+  // console.log("req.user", req.user);
   try {
     const userId = req.user._id;
-
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(userId).populate(
+      "membershipPlanDetails"
+    );
 
     if (!user) {
       return res
@@ -157,6 +160,7 @@ const getSelf = async (req, res) => {
 
     res.status(200).json({ success: true, user });
   } catch (error) {
+    console.error(error);
     res.status(500).send({ success: false, message: "An error occurred" });
   }
 };

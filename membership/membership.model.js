@@ -1,10 +1,8 @@
 const { default: mongoose } = require("mongoose");
 const Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId;
 
 const membershipModel = new Schema(
   {
-    id: ObjectId,
     PlanName: {
       type: String,
       required: true,
@@ -23,6 +21,22 @@ const membershipModel = new Schema(
     },
     isActive: {
       type: Boolean,
+      required: true,
+    },
+    WhatWeOffers: {
+      type: Array,
+      required: true,
+    },
+    Discounts: {
+      type: String,
+      required: true,
+    },
+    Duration: {
+      type: Number,
+      required: true,
+    },
+    FreeTrial: {
+      type: String,
       required: true,
     },
   },
