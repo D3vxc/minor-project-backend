@@ -25,7 +25,7 @@ const createSchedule = async (req, res) => {
     res
       .status(201)
       .json({ data: newSchedule, message: "Schedule created successfully" });
-    console.log("object", newSchedule);
+    // console.log("object", newSchedule);
   } catch (err) {
     res.status(400).json({ error: "Invalid Request" });
     console.log("error", err);

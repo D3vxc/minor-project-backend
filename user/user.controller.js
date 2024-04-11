@@ -166,9 +166,6 @@ const getSelf = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  // res.clearCookie("token");
-  // res.status(200).send({ message: "Logged out successfully" });
-
   res.clearCookie("token");
   res.status(200).send({ message: "Logged out successfully" });
   console.log("Logged out successfully");

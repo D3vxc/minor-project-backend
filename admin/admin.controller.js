@@ -32,7 +32,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log("===>", req.body);
+  // console.log("===>", req.body);
 
   try {
     const admin = await AdminModel.findOne({
@@ -66,8 +66,6 @@ const login = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-
 
 module.exports = {
   register,
