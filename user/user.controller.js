@@ -17,31 +17,47 @@ const sendresetPasswordMail = async (name, email, token) => {
 };
 
 const register = async (req, res) => {
-  const { name, phone, email, password } = req.body;
+  const { name, phone, email, password, address } = req.body;
   try {
     const UserEmail = await UserModel.findOne({ email });
     if (UserEmail) {
-      return res.status(400).json({ message: "invalid email" });
+      return res.status(400).json({ message: "Email already in use" });
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
+
+    if (
+      !address ||
+      !address.street ||
+      !address.city ||
+      !address.state ||
+      !address.postalCode ||
+      !address.country
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Complete address information is required" });
+    }
 
     const newUser = await UserModel.create({
       name,
       phone,
       email,
       password: hashPassword,
+      address,
       isVerified: true,
     });
+
     res
       .status(201)
       .send({ data: newUser, message: "User created successfully" });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: "Error creating user", error });
     console.log(error);
   }
 };
+
 const getUsers = async (req, res) => {
   try {
     const users = await UserModel.find();
@@ -67,8 +83,6 @@ const login = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    // console.log("User Login Successfully :)", user, token);
-
     res
       .status(200)
       .json({ token, message: "User LoggedIn Successfully :)", user });
@@ -88,6 +102,33 @@ const deleteUser = async (req, res) => {
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const updateMembership = async (req, res) => {
+  const { userId, membershipPlanId, expiryDate } = req.body;
+
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          membershipPlanDetails: membershipPlanId,
+          expiryDate: expiryDate,
+        },
+      },
+      { new: true }
+    ).populate("membershipPlanDetails");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Membership updated successfully", data: updatedUser });
+  } catch (error) {
+    res.status(500).send({ message: "Error updating membership" });
   }
 };
 
@@ -168,7 +209,6 @@ const getSelf = async (req, res) => {
 const logout = async (req, res) => {
   res.clearCookie("token");
   res.status(200).send({ message: "Logged out successfully" });
-  console.log("Logged out successfully");
 };
 
 module.exports = {
@@ -180,4 +220,5 @@ module.exports = {
   reset_password,
   getSelf,
   logout,
+  updateMembership,
 };

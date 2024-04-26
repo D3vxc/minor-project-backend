@@ -9,8 +9,8 @@ const {
 } = require("./cart.controller");
 
 router.post("/addToCart", addToCart);
-router.patch("/updateCart/:productId", updateCartItem);
-router.delete("/removeFromCart/:productId", removeItemFromCart);
+router.post("/updateCart", updateCartItem);
+router.delete("/removeFromCart", removeItemFromCart);
 router.get("/getCarts", getCartItems);
 router.delete("/deleteCart", clearCart);
 

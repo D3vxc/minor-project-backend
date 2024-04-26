@@ -49,4 +49,37 @@ router.post("/verify", async (req, res) => {
   }
 });
 
+router.post("/membership/update", async (req, res) => {
+  try {
+    const { userId, planId, amount } = req.body;
+    const order = await createOrder(userId, planId, amount);
+    res.status(201).json({ success: true, order });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to create order", error });
+  }
+});
+
+router.post("/membership/verify", async (req, res) => {
+  const { paymentId, orderId } = req.body;
+  const isValid = await verifyPayment(paymentId, orderId);
+  if (isValid) {
+    const order = await getOrder(orderId);
+    const updatedUser = await updateMembershipDetails(
+      order.userId,
+      order.planId
+    );
+    res.status(200).json({
+      success: true,
+      message: "Membership updated",
+      user: updatedUser,
+    });
+  } else {
+    res
+      .status(400)
+      .json({ success: false, message: "Payment verification failed" });
+  }
+});
+
 module.exports = router;

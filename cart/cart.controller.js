@@ -24,7 +24,7 @@ const addToCart = async (req, res) => {
     }
 
     await cart.save();
-    console.log("Product added to cart successfully", cart, req.user._id);
+    // console.log("Product added to cart successfully", cart, req.user._id);
     res
       .status(200)
       .json({ message: "Product added to cart successfully", cart });
@@ -34,12 +34,14 @@ const addToCart = async (req, res) => {
   }
 };
 
-// Update item quantity in cart
 const updateCartItem = async (req, res) => {
   const { userId, productId, quantity } = req.body;
+  console.log(`Updating cart for user: ${userId}`);
+
   try {
     const cart = await CartModel.findOne({ user: userId });
     if (!cart) {
+      console.log("Cart not found for user:", userId);
       return res.status(404).send({ message: "Cart not found" });
     }
     const index = cart.products.findIndex(
@@ -48,16 +50,18 @@ const updateCartItem = async (req, res) => {
     if (index > -1) {
       cart.products[index].quantity = quantity;
       await cart.save();
+      console.log(`Cart updated for user: ${userId}`);
       res.status(200).json({ message: "Cart updated", cart });
     } else {
+      console.log(`Product not found in cart: ${productId}`);
       res.status(404).send({ message: "Product not found in cart" });
     }
   } catch (error) {
+    console.error("Error updating cart:", error);
     res.status(500).send({ error: "Internal server error" });
   }
 };
 
-// Remove item from cart
 const removeItemFromCart = async (req, res) => {
   const { userId, productId } = req.body;
   try {
