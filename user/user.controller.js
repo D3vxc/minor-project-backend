@@ -18,15 +18,15 @@ const sendresetPasswordMail = async (name, email, token) => {
 
 const register = async (req, res) => {
   const { name, phone, email, password, address } = req.body;
+
   try {
-    const UserEmail = await UserModel.findOne({ email });
-    if (UserEmail) {
+    // Check if email is already in use
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({ message: "Email already in use" });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
-
+    // Validate address fields
     if (
       !address ||
       !address.street ||
@@ -40,21 +40,26 @@ const register = async (req, res) => {
         .json({ message: "Complete address information is required" });
     }
 
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create new user
     const newUser = await UserModel.create({
       name,
       phone,
       email,
-      password: hashPassword,
-      address,
+      password: hashedPassword,
+      addresses: address,
       isVerified: true,
     });
 
     res
       .status(201)
-      .send({ data: newUser, message: "User created successfully" });
+      .json({ data: newUser, message: "User created successfully" });
   } catch (error) {
-    res.status(500).send({ message: "Error creating user", error });
-    console.log(error);
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

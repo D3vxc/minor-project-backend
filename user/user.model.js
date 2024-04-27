@@ -2,11 +2,11 @@ const { default: mongoose } = require("mongoose");
 const Schema = mongoose.Schema;
 
 const AddressSchema = new Schema({
-  street: { type: String, required: true },
-  city: { type: String, required: true },
-  state: { type: String, required: true },
-  postalCode: { type: String, required: true },
-  country: { type: String, required: true },
+  street: { type: String, required: false },
+  city: { type: String, required: false },
+  state: { type: String, required: false },
+  postalCode: { type: String, required: false },
+  country: { type: String, required: false },
 });
 
 const User = new Schema(
