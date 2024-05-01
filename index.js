@@ -16,6 +16,8 @@ const membershipRoutes = require("./membership/membership.route");
 // const scheduleRoutes = require("./schedule/schedule.route");
 const cartRoutes = require("./cart/cart.route");
 const paymentRoutes = require("./utils/payment.js");
+const invoiceRoutes = require("./invoice/invoice.route");
+const orderRoutes = require("./order/order.route");
 
 // Import authentication middleware
 const { authenticate } = require("./middleware/auth.middleware.js"); // Adjust path as needed
@@ -40,6 +42,8 @@ app.use("/workout", workoutRoutes); // Example of protected route
 app.use("/trainer", trainerRoutes); // Protected route
 app.use("/membership", membershipRoutes); // Protected route
 // app.use("/schedule", authenticate, scheduleRoutes); // Protected route
+app.use("/invoice", invoiceRoutes); // Protected route
+app.use("/order", orderRoutes); // Protected route
 
 const port = process.env.PORT || 7001;
 const mongoURL =
